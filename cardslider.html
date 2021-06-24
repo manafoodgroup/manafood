@@ -1,0 +1,294 @@
+{% load static %}
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>mana food order</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<script src="https://unpkg.com/cart-localstorage@1.1.4/dist/cart-localstorage.min.js" type="text/javascript"></script>
+</head>
+
+<body class="">
+	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+		<h1 class="my-0 mr-md-auto font-weight-normal">mana food order</h1>
+
+		<button class="btn btn-outline-warning mr-2" onClick="cartLS.destroy()">Destroy order</button>
+		<a class="btn btn-outline-primary" href="">final order</a>
+	</div>
+	<div class="container">
+		<div class="card mb-4 shadow-sm">
+			<div class="card-header">
+				<h2>Cart</h2>
+			</div>
+			<div class="card-body">
+				<table class="table">
+					<tbody class="cart">
+					</tbody>
+					<tfoot>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class="text-right">Total: <strong class="total"></strong></td>
+						<td></td>
+					</tfoot>
+				</table>
+				
+                
+               {% if not user.is_authenticated %}
+				<form>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">code moaref</label>
+      <input type="password" class="form-control" id="inputPassword4" placeholder="code moaref">
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Address</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Address 2</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">ostan</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    
+    <div class="form-group col-md-2">
+      <label for="inputZip">adress code</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="gridCheck">
+      <label class="form-check-label" for="gridCheck">
+        service vip
+      </label>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">order</button>
+</form>
+{% endif%}
+
+			</div>
+		</div>
+	</div>
+	<script>
+		function renderCart(items) {
+			const $cart = document.querySelector(".cart")
+			const $total = document.querySelector(".total")
+
+			$cart.innerHTML = items.map((item) => `
+					<tr>
+						<td>#${item.id}</td>
+						<td>${item.name}</td>
+						<td>${item.quantity}</td>
+						<td style="width: 60px;">	
+							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
+								onClick="cartLS.quantity(${item.id},1)">+</button>
+						</td>
+						<td style="width: 60px;">	
+							<button type="button" class="btn btn-block btn-sm btn-outline-primary"
+								onClick="cartLS.quantity(${item.id},-1)">-</button>
+						</td>
+						<td class="text-right">$${item.price}</td>
+						<td class="text-right"><Button class="btn btn-primary" onClick="cartLS.remove(${item.id})">Delete</Button></td>
+					</tr>`).join("")
+
+			$total.innerHTML = "$" + cartLS.total()
+		}
+		renderCart(cartLS.list())
+		cartLS.onChange(renderCart)
+	</script>
+	<div class="container">
+		<h2>Specials and Tasty Menu</h2><br>
+
+		<div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/specials-1.png' %}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">shrimp (special)</p>
+					<p class="card-text text-center">100$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 1, name: 'shrimp (special)', price: 100})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/specials-2.png'%}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">spacial salad (special)</p>
+					<p class="card-text text-center">90$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 2, name: 'spacial salad (special)', price: 90})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/specials-3.png'  %}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">pasta (spesial)</p>
+					<p class="card-text text-center">80$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 3, name: 'pasta (spesial)', price: 80})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/specials-4.png'%}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">mana food special (special)</p>
+					<p class="card-text text-center">20$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 4, name: 'mana food special (special)', price: 20})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/specials-5.png' %}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">fruit salad (special)</p>
+					<p class="card-text text-center">200$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 5, name: 'fruit salad (special)', price: 200})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/soup milk.jpg' %}" alt="Card image cap" style="height:293px;">
+				  <div class="card-body">
+					<p class="card-text text-center">soup milk</p>
+					<p class="card-text text-center">7.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 7, name: 'soup milk', price: 7.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/lemon drink.jpg' %}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">lemon drink</p>
+					<p class="card-text text-center">9.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 8, name: 'lemon drink', price: 9.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/greek-salad.jpg' %}" alt="Card image cap" style="height:197px;">
+				  <div class="card-body">
+					<p class="card-text text-center">kahoo salad</p>
+					<p class="card-text text-center">9.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 9, name: 'kahoo salad', price: 9.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/coka drink.jpg' %}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">coka drink</p>
+					<p class="card-text text-center">12.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 10, name: 'coka drink', price: 12.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/orange drink.jpg'%}" alt="Card image cap" style="height:204px;">
+				  <div class="card-body">
+					<p class="card-text text-center">orange drink</p>
+					<p class="card-text text-center">6.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 11, name: 'orange drink', price: 6.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/caesar.jpg'%}" alt="Card image cap" style="height:218px;">
+				  <div class="card-body">
+					<p class="card-text text-center">irani salad</p>
+					<p class="card-text text-center">8.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 12, name: 'irani salad', price: 8.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/Dolme.jpg'%}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">dolme</p>
+					<p class="card-text text-center">4.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 13, name: 'dolme', price: 4.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+
+		<div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+			<div class="card" style="width: 18rem; margin-bottom: 10px  !important;">
+				<img class="card-img-top" src="{% static 'mainrestaurant/assets/img/menu/hot chips.jpg'%}" alt="Card image cap">
+				  <div class="card-body">
+					<p class="card-text text-center">hot chips</p>
+					<p class="card-text text-center">9.95$</p>
+					<button type="button" class="btn btn-block btn-outline-primary"
+						onClick="cartLS.add({id: 14, name: 'hot chips', price: 9.95})">Add to
+						Cart</button>
+				</div>
+			</div>
+		</div><br>
+			
+			
+		</div><br><br>
+	</div>
+		
+</body>
+
+</html>
